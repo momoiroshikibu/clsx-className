@@ -41,11 +41,11 @@ function convert(editor: vscode.TextEditor) {
         doc.lineAt(doc.lineCount - 1).range.end
       ),
       originalText.replace(
-        /className="([^"]*)"/g,
+        /className=\{?"([^"}]*)"\}?/g,
         (match, classNames: string) => {
           // クラス名をスペースで分割し、clsxの引数形式に変換
           const clsxArgs = classNames
-            .split(" ")
+            .split(/\s+/)
             .map((className) => `"${className}"`)
             .join(", ");
           return `className={clsx(${clsxArgs})}`;
