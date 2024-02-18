@@ -1,15 +1,29 @@
-import * as assert from 'assert';
+import * as assert from "assert";
+import * as vscode from "vscode";
 
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
-import * as vscode from 'vscode';
-// import * as myExtension from '../../extension';
+suite("className conversion", () => {
+  test("clsx-className.convert works", async () => {
+    const document = await vscode.workspace.openTextDocument({
+      content: `import React from "react";
+export const SomeComponent = () => {
+    return <div className="a b c">
+        <div className={"d e f"}>hello</div>
+    </div>;
+}`,
+    });
 
-suite('Extension Test Suite', () => {
-	vscode.window.showInformationMessage('Start all tests.');
+    const editor = await vscode.window.showTextDocument(document);
+    await vscode.commands.executeCommand("clsx-className.convert");
+    const text = editor.document.getText();
 
-	test('Sample test', () => {
-		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
-		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
-	});
+    assert.strictEqual(
+      text,
+      `import React from "react";
+export const SomeComponent = () => {
+    return <div className={clsx("a", "b", "c")}>
+        <div className={clsx("d", "e", "f")}>hello</div>
+    </div>;
+}`
+    );
+  });
 });
