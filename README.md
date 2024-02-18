@@ -1,5 +1,7 @@
 # clsx-className
 
+[clsx-className](https://marketplace.visualstudio.com/items?itemName=momoiroshikibu.clsx-className)
+
 ## About the extension
 
 Using this extension, you can convert space concatenated class names to `clsx` style.
