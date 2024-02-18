@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
+import { convertClassName } from "./lib/converter";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -40,17 +41,7 @@ function convert(editor: vscode.TextEditor) {
         doc.lineAt(0).range.start,
         doc.lineAt(doc.lineCount - 1).range.end
       ),
-      originalText.replace(
-        /className=\{?"([^"}]*)"\}?/g,
-        (match, classNames: string) => {
-          // クラス名をスペースで分割し、clsxの引数形式に変換
-          const clsxArgs = classNames
-            .split(/\s+/)
-            .map((className) => `"${className}"`)
-            .join(", ");
-          return `className={clsx(${clsxArgs})}`;
-        }
-      )
+      convertClassName(originalText)
     );
   });
 }
